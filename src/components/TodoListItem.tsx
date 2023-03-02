@@ -1,4 +1,4 @@
-import { Avatar, Button, List, Space } from "antd";
+import { Button, List, Space } from "antd";
 import { TodoType } from "../AppContainer";
 
 type propsType = {
@@ -16,7 +16,15 @@ const TodoListItem = (props: propsType) => {
       </Space>
       <Space>
         <Button>Edit</Button>
-        <Button danger>Delete</Button>
+        <Button
+          type="primary"
+          danger
+          onClick={() => {
+            props.deleteTodo(props.todoItem);
+          }}
+        >
+          Delete
+        </Button>
       </Space>
     </List.Item>
   );

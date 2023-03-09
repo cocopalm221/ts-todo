@@ -10,7 +10,7 @@ export const Wrapper = styled.div`
 `;
 
 //공통 레이아웃
-export const inner = styled.div`
+export const Inner = styled.div`
   padding: 30px;
 `;
 

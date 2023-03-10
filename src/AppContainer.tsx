@@ -16,6 +16,10 @@ import produce from "immer";
 import App from "./App";
 import moment from "moment";
 import { async } from "@firebase/util";
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
 
 export type TodoType = {
   uid: string;
@@ -235,6 +239,37 @@ const AppContainer = () => {
 
   // 데이터목록의 타입
   const states: StatesType = { todoList };
+
+  //사용자 로그인 기능
+  const fbLogin = (email: string, password: string) => {
+    signInWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        // Signed in
+        const user = userCredential.user;
+        console.log(user);
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.log(errorCode);
+        console.log(errorMessage);
+      });
+  };
+  //사용자 가입
+  const fbJoin = (email: string, password: string) => {
+    createUserWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        // Signed in
+        const user = userCredential.user;
+        console.log(user);
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.log(errorCode);
+        console.log(errorMessage);
+      });
+  };
 
   useEffect(() => {
     getLocalData();

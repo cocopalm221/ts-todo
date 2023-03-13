@@ -1,61 +1,113 @@
-import React from "react";
-import { LockOutlined, UserOutlined } from "@ant-design/icons";
-import { Button, Checkbox, Form, Input } from "antd";
+import React, { useEffect } from "react";
+import { Button, Checkbox, Form, Input, Space } from "antd";
+import { useNavigate } from "react-router-dom";
+import { CallBacksFireBaseType } from "../AppContainer";
 
-const Join = () => {
+const formItemLayout = {
+  labelCol: {
+    xs: { span: 24 },
+    sm: { span: 8 },
+  },
+  wrapperCol: {
+    xs: { span: 24 },
+    sm: { span: 16 },
+  },
+};
+
+const tailFormItemLayout = {
+  wrapperCol: {
+    xs: {
+      span: 24,
+      offset: 0,
+    },
+    sm: {
+      span: 16,
+      offset: 8,
+    },
+  },
+};
+
+type PropsType = {
+  userLogin: Boolean;
+  callBacksFireBase: CallBacksFireBaseType;
+};
+const Login = ({ userLogin, callBacksFireBase }: PropsType) => {
+  const navigate = useNavigate();
+  const [form] = Form.useForm();
+
   const onFinish = (values: any) => {
-    console.log("Received values of form: ", values);
+    console.log("Success:", values);
+    callBacksFireBase.fbLogin(values.email, values.password);
   };
+
+  useEffect(() => {
+    if (userLogin) {
+      navigate("/");
+    }
+  }, [userLogin]);
+
   return (
     <div style={{ paddingBottom: 20, minHeight: 500 }}>
       <Form
-        name="normal_login"
-        className="login-form"
-        initialValues={{ remember: true }}
+        {...formItemLayout}
+        form={form}
+        name="register"
         onFinish={onFinish}
+        initialValues={{}}
+        style={{ maxWidth: "95%" }}
+        scrollToFirstError
       >
         <Form.Item
-          name="username"
-          rules={[{ required: true, message: "Please input your Username!" }]}
+          name="email"
+          label="E-mail"
+          rules={[
+            {
+              type: "email",
+              message: "The input is not valid E-mail!",
+            },
+            {
+              required: true,
+              message: "Please input your E-mail!",
+            },
+          ]}
         >
-          <Input
-            prefix={<UserOutlined className="site-form-item-icon" />}
-            placeholder="Username"
-          />
+          <Input />
         </Form.Item>
+
         <Form.Item
           name="password"
-          rules={[{ required: true, message: "Please input your Password!" }]}
+          label="Password"
+          rules={[
+            {
+              required: true,
+              message: "Please input your password!",
+            },
+          ]}
+          hasFeedback
         >
-          <Input
-            prefix={<LockOutlined className="site-form-item-icon" />}
-            type="password"
-            placeholder="Password"
-          />
-        </Form.Item>
-        <Form.Item>
-          <Form.Item name="remember" valuePropName="checked" noStyle>
-            <Checkbox>Remember me</Checkbox>
-          </Form.Item>
-
-          <a className="login-form-forgot" href="">
-            Forgot password
-          </a>
+          <Input.Password />
         </Form.Item>
 
-        <Form.Item>
-          <Button
-            type="primary"
-            htmlType="submit"
-            className="login-form-button"
-          >
-            Log in
-          </Button>
-          Or <a href="">register now!</a>
+        <Form.Item {...tailFormItemLayout}>
+          <Space>
+            {/* 회원가입 데이터 전송 */}
+            <Button type="primary" htmlType="submit">
+              Login
+            </Button>
+
+            {/* 회원가입 창으로 이동 */}
+            <Button
+              type="primary"
+              htmlType="button"
+              onClick={() => navigate("/join")}
+            >
+              Member Join
+            </Button>
+          </Space>
         </Form.Item>
       </Form>
     </div>
   );
 };
 
-export default Join;
+export default Login;

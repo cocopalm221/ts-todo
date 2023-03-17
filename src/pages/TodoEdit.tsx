@@ -16,6 +16,7 @@ type propsType = {
 
 const TodoEdit = ({ states, callBacks }: propsType) => {
   const path = process.env.PUBLIC_URL;
+
   const [form] = Form.useForm();
   // navigate 로 전달된 uid 를 활용
   const { uid } = useParams();
@@ -41,7 +42,7 @@ const TodoEdit = ({ states, callBacks }: propsType) => {
       uid: String(uid),
       title: values.title,
       body: values.body,
-      date: values.date,
+      date: moment(values.date).format("YYYY-MM-DD"),
       done: values.done,
       sticker: values.sticker,
     };
@@ -105,7 +106,7 @@ const TodoEdit = ({ states, callBacks }: propsType) => {
           name="date"
           rules={[{ required: true, message: "날짜를 입력하세요." }]}
         >
-          <DatePicker style={{ width: "100%" }} />
+          <DatePicker style={{ width: "100%" }} disabled />
         </Form.Item>
         {/* 스티커 선택 */}
         <Form.Item
